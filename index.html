@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contador de Tempo</title>
+  <style>
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      flex-direction: column;
+      text-align: center;
+      overflow-x: hidden;
+    }
+
+    /* Tela inicial */
+    #tela-inicial {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #tela-inicial h1 {
+      font-size: 2em;
+      margin-bottom: 30px;
+    }
+
+    #botao {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 3.5em;
+      color: #00ffc8;
+      filter: drop-shadow(0 0 5px #00ffc8);
+      animation: brilhar 1.5s infinite alternate;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    @keyframes brilhar {
+      0% { filter: drop-shadow(0 0 5px #00ffc8); }
+      100% { filter: drop-shadow(0 0 20px #00ffc8); }
+    }
+
+    #botao:hover { transform: scale(1.2); }
+
+    /* Tela do contador */
+    #tela-contador {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 400px;
+      padding: 0 15px;
+    }
+
+    #tela-contador h1 { margin-bottom: 20px; }
+    #contador { font-size: 2em; font-weight: bold; color: #00ffc8; margin-bottom: 25px; }
+
+    /* Carrossel */
+    .carrossel { position: relative; width: 100%; max-width: 350px; height: 500px; overflow: hidden; border-radius: 20px; box-shadow: 0 0 15px rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; margin-bottom: 20px; }
+    .slides { display: flex; width: 100%; height: 100%; transition: transform 0.6s ease-in-out; }
+    .slides img { width: 100%; height: 100%; object-fit: contain; border-radius: 20px; }
+    .bolinhas { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+    .bolinha { width: 14px; height: 14px; border-radius: 50%; background-color: #aaa; cursor: pointer; transition: 0.3s; }
+    .bolinha.ativa { background-color: #00ffc8; }
+
+    #mensagem {
+      font-size: 1em;
+      line-height: 1.5em;
+      text-align: center;
+      color: #ddd;
+      margin-bottom: 30px;
+      padding: 0 10px;
+    }
+
+    footer { font-size: 0.85em; color: #ccc; text-align: center; margin-bottom: 10px; }
+
+    @media (max-width: 400px) {
+      #contador { font-size: 1.6em; }
+      .carrossel { max-width: 320px; height: 460px; }
+      #mensagem { font-size: 0.95em; max-width: 320px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Tela Inicial -->
+  <div id="tela-inicial">
+    <h1>Clique no coração:</h1>
+    <button id="botao">❤️</button>
+  </div>
+
+  <!-- Tela do Contador -->
+  <div id="tela-contador">
+    <h1>Eu te amo há:</h1>
+    <div id="contador">Carregando...</div>
+
+    <div class="carrossel">
+      <div class="slides" id="slides">
+        <img src="./img/WhatsApp Image 2025-10-27 at 19.53.53.jpeg" alt="Foto 1" />
+        <img src="./img/WhatsApp Image 2025-10-27 at 20.16.07.jpeg" alt="Foto 2" />
+        <img src="./img/WhatsApp Image 2025-10-27 at 20.17.28.jpeg" alt="Foto 3" />
+      </div>
+    </div>
+
+    <div class="bolinhas" id="bolinhas"></div>
+
+    <div id="mensagem">
+      Desde que você entrou na minha vida, tudo parece mais leve. Cada gesto seu transforma dias comuns em lembranças que quero guardar para sempre.<br/>
+      Ao seu lado, tudo ganha cor e sentido, como se meu coração sempre soubesse que era você.<br/>
+      Hoje, só quero mais de nós: mais risadas, mais abraços, mais desse amor que me faz tão bem.
+    </div>
+  </div>
+
+  <footer>Gabriel Marques &copy;</footer>
+
+  <script>
+    // Alternar telas
+    const botao = document.getElementById('botao');
+    const telaInicial = document.getElementById('tela-inicial');
+    const telaContador = document.getElementById('tela-contador');
+
+    botao.addEventListener('click', () => {
+      telaInicial.style.display = 'none';
+      telaContador.style.display = 'flex';
+    });
+
+    // Contador
+    function iniciarContador() {
+      function atualizarContador() {
+        const dataInicial = new Date(2025, 8, 18);
+        const agora = new Date();
+        const diferenca = agora - dataInicial;
+        const segundosTotais = Math.floor(diferenca / 1000);
+        const dias = Math.floor(segundosTotais / (3600*24));
+        const horas = Math.floor((segundosTotais % (3600*24))/3600);
+        const minutos = Math.floor((segundosTotais % 3600)/60);
+        const segundos = segundosTotais % 60;
+        document.getElementById('contador').textContent = `${dias} dias, ${horas}h ${minutos}min ${segundos}s`;
+      }
+      atualizarContador();
+      setInterval(atualizarContador, 1000);
+    }
+    iniciarContador();
+
+    // Carrossel
+    const slides = document.getElementById('slides');
+    const totalSlides = slides.children.length;
+    const bolinhasContainer = document.getElementById('bolinhas');
+    let indice = 0;
+    let intervalo;
+
+    for (let i=0;i<totalSlides;i++){
+      const bolinha = document.createElement('div');
+      bolinha.classList.add('bolinha');
+      if(i===0) bolinha.classList.add('ativa');
+      bolinha.addEventListener('click', ()=>mudarSlide(i));
+      bolinhasContainer.appendChild(bolinha);
+    }
+
+    const bolinhas = document.querySelectorAll('.bolinha');
+
+    function mudarSlide(i){
+      indice=i;
+      slides.style.transform = `translateX(-${indice*100}%)`;
+      atualizarBolinhas();
+      reiniciarAutoPlay();
+    }
+
+    function proximoSlide(){
+      indice = (indice+1) % totalSlides;
+      slides.style.transform = `translateX(-${indice*100}%)`;
+      atualizarBolinhas();
+    }
+
+    function atualizarBolinhas(){
+      bolinhas.forEach((b,i)=>b.classList.toggle('ativa', i===indice));
+    }
+
+    function iniciarAutoPlay(){
+      intervalo = setInterval(proximoSlide, 4000);
+    }
+
+    function reiniciarAutoPlay(){
+      clearInterval(intervalo);
+      iniciarAutoPlay();
+    }
+
+    iniciarAutoPlay();
+  </script>
+</body>
+</html>
